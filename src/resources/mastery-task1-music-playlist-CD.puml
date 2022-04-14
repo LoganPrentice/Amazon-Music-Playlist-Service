@@ -1,1 +1,91 @@
-PARTICIPANTS: use this file for creating the class diagram in mastery task 01
+@startuml
+'https://plantuml.com/sequence-diagram
+
+
+class AddSongToPlaylistActivity{
++ handleRequest(AddSongToPlaylistRequest, Context) : AddSongToPlaylistResult;
+}
+class CreatePlaylistActivity{
++ handleRequest(CreatePlaylistRequest, Context) : CreatePlaylistResult;
+}
+class GetPlaylistActivity{
++ handleRequest(GetPlaylistRequest, Context) : GetPlaylistResult;
+}
+class GetPlaylistSongsActivity{
++ handleRequest(GetPlaylistSongsRequest, Context) : GetPlaylistSongsResult;
+}
+class UpdatePlaylistActivity{
++ handleRequest(UpdatePlaylistRequest, Context) : UpdatePlaylistResult;
+}
+
+class AlbumTrack{
+-@DynamoDBHashKey asin : String;
+-@DynamoDBRangeKey trackNumber : Integer;
+-albumName : String;
+-songTitle : String;
+
+}
+class Playlist{
+-@DynamoDBHashKey id : String;
+-name : String;
+-customerId : String;
+-songCount : Integer;
+-tags : Set<String>;
+-songList : List<AlbumTrack>;
+}
+
+class AlbumTrackDao{
+- dynamoDbMapper : DynamoDBMapper;
+}
+class PlaylistDao{
+- dynamoDbMapper : DynamoDBMapper;
++ getPlaylist(String) : Playlist;
+}
+
+class AlbumTrackNotFoundException{
+}
+class InvalidAttributeValueException{
+}
+class PlaylistNotFoundException{
+}
+
+class AddSongToPlaylistRequest{
+}
+class CreatePlaylistRequest{
+}
+class GetPlaylistRequest{
+}
+class GetPlaylistSongsRequest{
+}
+class UpdatePlaylistRequest{
+}
+
+class AddSongToPlaylistResult{
+}
+class CreatePlaylistResult{
+}
+class GetPlaylistResult{
+}
+class GetPlaylistSongsResult{
+}
+class UpdatePlaylistResult{
+}
+
+class PlaylistModel{
+}
+class SongModel{
+}
+class SongOrder{
+}
+class MusicPlaylistServiceUtils{
+}
+
+Playlist --> AlbumTrack
+AddSongToPlaylistActivity --> AlbumTrackDao
+CreatePlaylistActivity --> PlaylistDao
+AddSongToPlaylistActivity --> PlaylistDao
+GetPlaylistActivity --> PlaylistDao
+GetPlaylistSongsActivity --> PlaylistDao
+UpdatePlaylistActivity --> PlaylistDao
+
+@enduml

@@ -5,6 +5,7 @@ import com.amazon.ata.music.playlist.service.models.results.CreatePlaylistResult
 import com.amazon.ata.music.playlist.service.models.PlaylistModel;
 import com.amazon.ata.music.playlist.service.dynamodb.PlaylistDao;
 
+import com.amazon.ata.music.playlist.service.util.MusicPlaylistServiceUtils;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import org.apache.logging.log4j.LogManager;
@@ -44,9 +45,15 @@ public class CreatePlaylistActivity implements RequestHandler<CreatePlaylistRequ
     @Override
     public CreatePlaylistResult handleRequest(final CreatePlaylistRequest createPlaylistRequest, Context context) {
         log.info("Received CreatePlaylistRequest {}", createPlaylistRequest);
+        PlaylistModel playlistModel = new PlaylistModel();
+        playlistModel.setName(createPlaylistRequest.getName());
+        playlistModel.setCustomerId(createPlaylistRequest.getCustomerId());
+        playlistModel.setTags(createPlaylistRequest.getTags());
+        playlistModel.setId(MusicPlaylistServiceUtils.generatePlaylistId());
 
+        playlistDao.savePlaylist(playlistModel.getId(), playlistModel.getName(), playlistModel.getCustomerId());
         return CreatePlaylistResult.builder()
-                .withPlaylist(new PlaylistModel())
+                .withPlaylist(playlistModel)
                 .build();
     }
 }
