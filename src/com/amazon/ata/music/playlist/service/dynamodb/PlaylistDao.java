@@ -10,7 +10,9 @@ import com.amazon.ata.music.playlist.service.util.MusicPlaylistServiceUtils;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Accesses data for a playlist using {@link Playlist} to represent the model in DynamoDB.
@@ -42,11 +44,20 @@ public class PlaylistDao {
 
         return playlist;
     }
-    public Playlist savePlaylist(String playlistId, String playlistName, String customerId) {
-        Playlist playlist = getPlaylist(playlistId);
+    public Playlist savePlaylist(PlaylistModel model) {
+        Playlist playlist = new Playlist();
+        Set<String> tagsSet = new HashSet<>(model.getTags());
+
+        playlist.setId(model.getId());
+        playlist.setName(model.getName());
+        playlist.setCustomerId(model.getCustomerId());
+        playlist.setSongCount(model.getSongCount());
+        playlist.setTags(tagsSet);
+
         List<AlbumTrack> songList;
-        if (!MusicPlaylistServiceUtils.isValidString(customerId) ||
-            !MusicPlaylistServiceUtils.isValidString(playlistName)) {
+
+        if (!MusicPlaylistServiceUtils.isValidString(model.getCustomerId()) ||
+            !MusicPlaylistServiceUtils.isValidString(model.getName())) {
             throw new InvalidAttributeValueException();
         }
         if (null == playlist.getSongList()) {
@@ -54,7 +65,6 @@ public class PlaylistDao {
             playlist.setSongList(songList);
         }
 
-        playlist.setName(playlistName);
         dynamoDbMapper.save(playlist);
         return playlist;
     }

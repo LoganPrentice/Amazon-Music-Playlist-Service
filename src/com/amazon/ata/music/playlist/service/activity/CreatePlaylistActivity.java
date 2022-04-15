@@ -51,7 +51,7 @@ public class CreatePlaylistActivity implements RequestHandler<CreatePlaylistRequ
         playlistModel.setTags(createPlaylistRequest.getTags());
         playlistModel.setId(MusicPlaylistServiceUtils.generatePlaylistId());
 
-        playlistDao.savePlaylist(playlistModel.getId(), playlistModel.getName(), playlistModel.getCustomerId());
+        playlistDao.savePlaylist(playlistModel);
         return CreatePlaylistResult.builder()
                 .withPlaylist(playlistModel)
                 .build();
