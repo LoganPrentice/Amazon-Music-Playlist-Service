@@ -44,26 +44,13 @@ public class PlaylistDao {
 
         return playlist;
     }
-    public Playlist savePlaylist(PlaylistModel model) {
-        Playlist playlist = new Playlist();
-        Set<String> tagsSet = new HashSet<>(model.getTags());
+    public Playlist savePlaylist(Playlist playlist) {
 
-        playlist.setId(model.getId());
-        playlist.setName(model.getName());
-        playlist.setCustomerId(model.getCustomerId());
-        playlist.setSongCount(model.getSongCount());
-        playlist.setTags(tagsSet);
-
-        List<AlbumTrack> songList;
-
-        if (!MusicPlaylistServiceUtils.isValidString(model.getCustomerId()) ||
-            !MusicPlaylistServiceUtils.isValidString(model.getName())) {
+        if (!MusicPlaylistServiceUtils.isValidString(playlist.getCustomerId()) ||
+            !MusicPlaylistServiceUtils.isValidString(playlist.getName())) {
             throw new InvalidAttributeValueException();
         }
-        if (null == playlist.getSongList()) {
-            songList = new ArrayList<>();
-            playlist.setSongList(songList);
-        }
+
 
         dynamoDbMapper.save(playlist);
         return playlist;

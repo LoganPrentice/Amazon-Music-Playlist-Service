@@ -14,7 +14,7 @@ public class ModelConverter {
      */
     public PlaylistModel toPlaylistModel(Playlist playlist) {
         List<String> tags;
-        if (playlist.getTags().size() == 0) {
+        if (playlist.getTags() == null) {
             tags = null;
         } else {
             tags = new ArrayList<>(playlist.getTags());
