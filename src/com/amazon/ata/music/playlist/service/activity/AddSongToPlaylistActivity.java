@@ -62,7 +62,7 @@ public class AddSongToPlaylistActivity implements RequestHandler<AddSongToPlayli
         ModelConverter converter = new ModelConverter();
 
         Playlist playlist = playlistDao.getPlaylist(addSongToPlaylistRequest.getId());
-        AlbumTrack track = albumTrackDao.getAlbumTrack(addSongToPlaylistRequest.getAsin(), addSongToPlaylistRequest.getId());
+        AlbumTrack track = albumTrackDao.getAlbumTrack(addSongToPlaylistRequest.getAsin(), addSongToPlaylistRequest.getTrackNumber());
 
         //Add if else for boolean Queue value
         playlist.getSongList().add(track);

@@ -27,10 +27,10 @@ public class AlbumTrackDao {
         this.dynamoDbMapper = dynamoDbMapper;
     }
 
-    public AlbumTrack getAlbumTrack(String asin, String id) {
-        AlbumTrack albumTrack = this.dynamoDbMapper.load(AlbumTrack.class, asin, id);
+    public AlbumTrack getAlbumTrack(String asin, int trackNumber) {
+        AlbumTrack albumTrack = this.dynamoDbMapper.load(AlbumTrack.class, asin, trackNumber);
         if (albumTrack == null) {
-            throw new AlbumTrackNotFoundException("Could not find album track with asin" + asin + id);
+            throw new AlbumTrackNotFoundException("Could not find album track with asin" + asin + trackNumber);
         }
 
         return albumTrack;
