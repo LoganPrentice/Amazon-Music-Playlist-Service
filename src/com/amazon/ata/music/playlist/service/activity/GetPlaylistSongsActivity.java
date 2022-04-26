@@ -2,6 +2,7 @@ package com.amazon.ata.music.playlist.service.activity;
 
 import com.amazon.ata.music.playlist.service.converters.ModelConverter;
 import com.amazon.ata.music.playlist.service.dynamodb.models.Playlist;
+import com.amazon.ata.music.playlist.service.models.SongOrder;
 import com.amazon.ata.music.playlist.service.models.requests.GetPlaylistSongsRequest;
 import com.amazon.ata.music.playlist.service.models.results.GetPlaylistSongsResult;
 import com.amazon.ata.music.playlist.service.models.SongModel;
@@ -50,7 +51,23 @@ public class GetPlaylistSongsActivity implements RequestHandler<GetPlaylistSongs
         ModelConverter converter = new ModelConverter();
 
         Playlist playlist = playlistDao.getPlaylist(getPlaylistSongsRequest.getId());
-//        Collections.shuffle();
+//        if (getPlaylistSongsRequest.getOrder().equals(SongOrder.DEFAULT)) {
+//            return GetPlaylistSongsResult.builder()
+//                    .withSongList(converter.toSongModelList(playlist.getSongList()))
+//                    .build();
+//        }
+        if (getPlaylistSongsRequest.getOrder().equals(SongOrder.REVERSED)) {
+            Collections.reverse(playlist.getSongList());
+            return GetPlaylistSongsResult.builder()
+                    .withSongList(converter.toSongModelList(playlist.getSongList()))
+                    .build();
+        }
+        if (getPlaylistSongsRequest.getOrder().equals(SongOrder.SHUFFLED)) {
+            Collections.shuffle(playlist.getSongList());
+            return GetPlaylistSongsResult.builder()
+                    .withSongList(converter.toSongModelList(playlist.getSongList()))
+                    .build();
+        }
         return GetPlaylistSongsResult.builder()
                 .withSongList(converter.toSongModelList(playlist.getSongList()))
                 .build();
