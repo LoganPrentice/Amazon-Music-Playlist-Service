@@ -40,6 +40,10 @@ public class ModelConverter {
                     .build();
             songModelList.add(model);
         }
+//        if (albumTracks.size() == 0) {
+//            List<SongModel> emptyList = new ArrayList<>();
+//            return emptyList;
+//        }
         return songModelList;
     }
 }

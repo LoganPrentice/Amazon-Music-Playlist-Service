@@ -60,6 +60,7 @@ public class CreatePlaylistActivity implements RequestHandler<CreatePlaylistRequ
         playlist.setCustomerId(createPlaylistRequest.getCustomerId());
         playlist.setId(MusicPlaylistServiceUtils.generatePlaylistId());
         playlist.setName(createPlaylistRequest.getName());
+        playlist.setSongCount(0);
         playlist.setSongList(new ArrayList<>());
 
         if (createPlaylistRequest.getTags() == null) {

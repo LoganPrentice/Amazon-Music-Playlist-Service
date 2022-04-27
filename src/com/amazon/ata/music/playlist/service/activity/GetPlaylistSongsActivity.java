@@ -14,7 +14,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Implementation of the GetPlaylistSongsActivity for the MusicPlaylistService's GetPlaylistSongs API.
@@ -51,25 +53,21 @@ public class GetPlaylistSongsActivity implements RequestHandler<GetPlaylistSongs
         ModelConverter converter = new ModelConverter();
 
         Playlist playlist = playlistDao.getPlaylist(getPlaylistSongsRequest.getId());
-//        if (getPlaylistSongsRequest.getOrder().equals(SongOrder.DEFAULT)) {
+        List<SongModel> songModelList = converter.toSongModelList(playlist.getSongList());
+//        if (playlist.getSongList() == null) {
+//            playlist.setSongList(new ArrayList<>(0));
 //            return GetPlaylistSongsResult.builder()
 //                    .withSongList(converter.toSongModelList(playlist.getSongList()))
 //                    .build();
 //        }
-        if (getPlaylistSongsRequest.getOrder().equals(SongOrder.REVERSED)) {
-            Collections.reverse(playlist.getSongList());
-            return GetPlaylistSongsResult.builder()
-                    .withSongList(converter.toSongModelList(playlist.getSongList()))
-                    .build();
-        }
-        if (getPlaylistSongsRequest.getOrder().equals(SongOrder.SHUFFLED)) {
-            Collections.shuffle(playlist.getSongList());
-            return GetPlaylistSongsResult.builder()
-                    .withSongList(converter.toSongModelList(playlist.getSongList()))
-                    .build();
+        SongOrder songOrder = getPlaylistSongsRequest.getOrder();
+        if (songOrder == SongOrder.REVERSED) {
+            Collections.reverse(songModelList);
+        } else if (songOrder == SongOrder.SHUFFLED) {
+            Collections.shuffle(songModelList);
         }
         return GetPlaylistSongsResult.builder()
-                .withSongList(converter.toSongModelList(playlist.getSongList()))
+                .withSongList(songModelList)
                 .build();
     }
 }
